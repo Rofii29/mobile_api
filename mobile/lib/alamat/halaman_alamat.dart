@@ -227,7 +227,7 @@ class _halamanalamatState extends State<halamanalamat> {
               ),
             ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color.fromARGB(255, 3, 101, 213),
+        backgroundColor: Color.fromARGB(255, 245, 53, 4),
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => tambahalamat()));
         },
