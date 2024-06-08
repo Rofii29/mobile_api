@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,37 +12,43 @@ class EditProduk extends StatefulWidget {
 
 class _EditProdukState extends State<EditProduk> {
   final formKey = GlobalKey<FormState>();
-  TextEditingController id_produk=TextEditingController();
-   TextEditingController nama =TextEditingController();
-   TextEditingController ukuran =TextEditingController();
-   TextEditingController harga =TextEditingController();
-   TextEditingController jenisBaju =TextEditingController();
+  TextEditingController id_produk = TextEditingController();
+  TextEditingController nama = TextEditingController();
+  TextEditingController ukuran = TextEditingController();
+  TextEditingController harga = TextEditingController();
+  TextEditingController jenisBaju = TextEditingController();
 
- Future  _ubah() async {
-  final respon = await 
-  http.post(Uri.parse('http://10.128.35.134/api/edit.php'),
-    body: {
-      'id_produk': id_produk.text, // Pass the ID of the product to update
-      'nama': nama.text,
-      'ukuran': ukuran.text,
-      'harga': harga.text,
-      'jenis_baju': jenisBaju.text,
-    },
-  );
-  if (respon.statusCode == 200) {
-    final responseJson = jsonDecode(respon.body);
-    return responseJson['pesan'] == 'sukses'; // Check for 'sukses' instead of 'sukses update'
+  Future<bool> _ubah() async {
+    final respon = await http.post(
+      Uri.parse('http://192.168.1.6/api/edit.php'),
+      body: {
+        'id_produk': id_produk.text,  // Pass the ID of the product to update
+        'nama': nama.text,
+        'ukuran': ukuran.text,
+        'harga': harga.text,
+        'jenis_baju': jenisBaju.text,
+      },
+    );
+
+    if (respon.statusCode == 200) {
+      final responseJson = jsonDecode(respon.body);
+      return responseJson['pesan'] == 'sukses';  // Check for 'sukses' instead of 'sukses update'
+    }
+    return false;
   }
-  return false;
-}
+
+  @override
+  void initState() {
+    super.initState();
+    id_produk.text = widget.ListData['id_produk'];
+    nama.text = widget.ListData['nama'];
+    ukuran.text = widget.ListData['ukuran'];
+    harga.text = widget.ListData['harga'];
+    jenisBaju.text = widget.ListData['jenis_baju'];
+  }
 
   @override
   Widget build(BuildContext context) {
-    id_produk.text = widget.ListData['id_produk'];
-     nama.text = widget.ListData['nama'];
-      ukuran.text = widget.ListData['ukuran'];
-       harga.text = widget.ListData['harga'];
-       jenisBaju.text = widget.ListData['jenis_baju'];
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Produk'),

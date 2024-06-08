@@ -1,32 +1,37 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:mobile/halaman_produk.dart';
+import 'package:mobile/profile/profile.dart';
 
-class TambahProduk extends StatefulWidget {
-  const TambahProduk({super.key});
+class tambahprofile extends StatefulWidget {
+  const tambahprofile({super.key});
 
   @override
-  State<TambahProduk> createState() => _TambahProdukState();
+  State<tambahprofile> createState() => _tambahprofileState();
 }
 
-class _TambahProdukState extends State<TambahProduk> {
+class _tambahprofileState extends State<tambahprofile> {
   final formKey = GlobalKey<FormState>();
   TextEditingController nama = TextEditingController();
-  TextEditingController harga = TextEditingController();
-  TextEditingController jenis_baju = TextEditingController();
-
-  String? ukuran; // This will hold the selected size
+  TextEditingController email = TextEditingController();
+  TextEditingController password= TextEditingController();
 
   Future _simpan() async {
-    final respon = await http.post(Uri.parse('http://192.168.1.6/api/create.php'), body: {
-      'nama': nama.text,
-      'ukuran': ukuran,
-      'harga': harga.text,
-      'jenis_baju': jenis_baju.text,
-    });
+    final respon = await http.post(
+      Uri.parse('http://192.168.1.6/api/createprofile.php'),
+      body: {
+        'nama': nama.text,
+        'email': email.text,
+        'password': password.text,
+      },
+    );
     if (respon.statusCode == 200) {
-      return true;
+      final result = jsonDecode(respon.body);
+      print(result);
+      return result['pesan'] == 'sukses';
     }
+    print('Error: ${respon.statusCode}');
     return false;
   }
 
@@ -34,7 +39,7 @@ class _TambahProdukState extends State<TambahProduk> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tambah Produk'),
+        title: Text('Tambah Profile'),
         backgroundColor: Colors.deepOrange,
       ),
       body: Form(
@@ -46,73 +51,46 @@ class _TambahProdukState extends State<TambahProduk> {
               TextFormField(
                 controller: nama,
                 decoration: InputDecoration(
-                  hintText: 'Nama Produk',
+                  hintText: 'Nama ',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return "Nama produk tidak boleh kosong!";
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 10),
-              DropdownButtonFormField<String>(
-                value: ukuran,
-                decoration: InputDecoration(
-                  hintText: 'Ukuran Produk',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                items: ['S', 'M', 'L', 'XL'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (newValue) {
-                  setState(() {
-                    ukuran = newValue;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Ukuran produk tidak boleh kosong!";
+                    return "Nama  tidak boleh kosong!";
                   }
                   return null;
                 },
               ),
               SizedBox(height: 10),
               TextFormField(
-                controller: harga,
+                controller: email,
                 decoration: InputDecoration(
-                  hintText: 'Harga Produk',
+                  hintText: ' Email',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return "Harga produk tidak boleh kosong!";
+                    return "email tidak boleh kosong!";
                   }
                   return null;
                 },
               ),
               SizedBox(height: 10),
               TextFormField(
-                controller: jenis_baju,
+                controller: password,
                 decoration: InputDecoration(
-                  hintText: 'Jenis Baju',
+                  hintText: 'password',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return "Jenis baju tidak boleh kosong!";
+                    return "password tidak boleh kosong!";
                   }
                   return null;
                 },
@@ -135,7 +113,7 @@ class _TambahProdukState extends State<TambahProduk> {
                       if (value) {
                         Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => HalamanProduk()),
+                          MaterialPageRoute(builder: (context) => ProfilePage()),
                           (route) => false,
                         );
                       }

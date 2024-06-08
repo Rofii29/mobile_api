@@ -1,40 +1,54 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:mobile/halaman_produk.dart';
 
-class TambahProduk extends StatefulWidget {
-  const TambahProduk({super.key});
+class editprofile extends StatefulWidget {
+  final Map ListData;
+  const editprofile({super.key, required this.ListData});
 
   @override
-  State<TambahProduk> createState() => _TambahProdukState();
+  State<editprofile> createState() => _editprofileState();
 }
 
-class _TambahProdukState extends State<TambahProduk> {
+class _editprofileState extends State<editprofile> {
   final formKey = GlobalKey<FormState>();
+  TextEditingController id_profile = TextEditingController();
   TextEditingController nama = TextEditingController();
-  TextEditingController harga = TextEditingController();
-  TextEditingController jenis_baju = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
 
-  String? ukuran; // This will hold the selected size
+  Future<bool> _ubah() async {
+    final respon = await http.post(
+      Uri.parse('http://192.168.1.6/api/editprofile.php'),
+      body: {
+        'id_profile': id_profile.text,  // Pass the ID of the product to update
+        'nama': nama.text,
+        'email': email.text,
+        'password': password.text,
+      },
+    );
 
-  Future _simpan() async {
-    final respon = await http.post(Uri.parse('http://192.168.1.6/api/create.php'), body: {
-      'nama': nama.text,
-      'ukuran': ukuran,
-      'harga': harga.text,
-      'jenis_baju': jenis_baju.text,
-    });
     if (respon.statusCode == 200) {
-      return true;
+      final responseJson = jsonDecode(respon.body);
+      return responseJson['pesan'] == 'sukses';  // Check for 'sukses' instead of 'sukses update'
     }
     return false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    id_profile.text = widget.ListData['id_profile'];
+    nama.text = widget.ListData['nama'];
+    email.text = widget.ListData['email'];
+    password.text = widget.ListData['password'];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tambah Produk'),
+        title: Text('Edit Produk'),
         backgroundColor: Colors.deepOrange,
       ),
       body: Form(
@@ -46,7 +60,7 @@ class _TambahProdukState extends State<TambahProduk> {
               TextFormField(
                 controller: nama,
                 decoration: InputDecoration(
-                  hintText: 'Nama Produk',
+                  hintText: 'Nama',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -59,60 +73,33 @@ class _TambahProdukState extends State<TambahProduk> {
                 },
               ),
               SizedBox(height: 10),
-              DropdownButtonFormField<String>(
-                value: ukuran,
-                decoration: InputDecoration(
-                  hintText: 'Ukuran Produk',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                items: ['S', 'M', 'L', 'XL'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (newValue) {
-                  setState(() {
-                    ukuran = newValue;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Ukuran produk tidak boleh kosong!";
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 10),
               TextFormField(
-                controller: harga,
+                controller: email,
                 decoration: InputDecoration(
-                  hintText: 'Harga Produk',
+                  hintText: 'email ',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return "Harga produk tidak boleh kosong!";
+                    return "email tidak boleh kosong!";
                   }
                   return null;
                 },
               ),
               SizedBox(height: 10),
               TextFormField(
-                controller: jenis_baju,
+                controller: password,
                 decoration: InputDecoration(
-                  hintText: 'Jenis Baju',
+                  hintText: 'password',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return "Jenis baju tidak boleh kosong!";
+                    return "password tidak boleh kosong!";
                   }
                   return null;
                 },
@@ -127,22 +114,18 @@ class _TambahProdukState extends State<TambahProduk> {
                 ),
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
-                    _simpan().then((value) {
+                    _ubah().then((value) {
                       final snackBar = SnackBar(
-                        content: Text(value ? 'Data berhasil disimpan' : 'Data gagal disimpan'),
+                        content: Text(value ? 'Data berhasil diupdate' : 'Data gagal diupdate'),
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       if (value) {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => HalamanProduk()),
-                          (route) => false,
-                        );
+                        Navigator.pop(context, true); // Return true if update is successful
                       }
                     });
                   }
                 },
-                child: Text('Simpan'),
+                child: Text('Update'),
               ),
             ],
           ),

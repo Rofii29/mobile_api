@@ -10,7 +10,7 @@ class DetailProduk extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Detail Produk'),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Colors.blue,
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),

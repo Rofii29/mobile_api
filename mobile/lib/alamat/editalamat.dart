@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -13,40 +12,42 @@ class editalamat extends StatefulWidget {
 
 class _editalamatState extends State<editalamat> {
   final formKey = GlobalKey<FormState>();
-  TextEditingController id_alamat=TextEditingController();
-   TextEditingController nama_lengkap =TextEditingController();
-   TextEditingController nomortelp =TextEditingController();
-   TextEditingController kota =TextEditingController();
-   TextEditingController namajalan=TextEditingController();
+  TextEditingController id_alamat = TextEditingController();
+  TextEditingController nama_lengkap = TextEditingController();
+  TextEditingController nomortelp = TextEditingController();
+  TextEditingController kota = TextEditingController();
+  TextEditingController namajalan = TextEditingController();
 
- Future  _ubah() async {
-  final respon = await 
-  http.post(Uri.parse('http://10.128.35.134/api/editalamat.php'),
-    body: {
-      'id_alamat': id_alamat.text, // Pass the ID of the product to update
-      'nama': nama_lengkap.text,
-      'nomortelp': nomortelp.text,
-      'kota': kota.text,
-      'namajalan': namajalan.text,
-    },
-  );
-  if (respon.statusCode == 200) {
-    final responseJson = jsonDecode(respon.body);
-    return responseJson['pesan'] == 'sukses'; // Check for 'sukses' instead of 'sukses update'
+  Future<bool> _ubah() async {
+    final response = await http.post(
+      Uri.parse('http://192.168.1.6/api/editalamat.php'),
+      body: {
+        'id_alamat': id_alamat.text,  // Pass the ID of the product to update
+        'nama_lengkap': nama_lengkap.text,
+        'nomortelp': nomortelp.text,
+        'kota': kota.text,
+        'namajalan': namajalan.text,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseJson = jsonDecode(response.body);
+      return responseJson['pesan'] == 'sukses';  // Check for 'sukses' instead of 'sukses update'
+    }
+    return false;
   }
-  return false;
-}
 
   @override
   Widget build(BuildContext context) {
     id_alamat.text = widget.ListData['id_alamat'];
-     nama_lengkap.text = widget.ListData['nama_lengkap'];
-      nomortelp.text = widget.ListData['nomortelp'];
-       kota.text = widget.ListData['kota'];
-       namajalan.text = widget.ListData['namajalan'];
+    nama_lengkap.text = widget.ListData['nama_lengkap'];
+    nomortelp.text = widget.ListData['nomortelp'];
+    kota.text = widget.ListData['kota'];
+    namajalan.text = widget.ListData['namajalan'];
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit alamat'),
+        title: Text('Edit Alamat'),
         backgroundColor: Colors.deepOrange,
       ),
       body: Form(
@@ -74,14 +75,14 @@ class _editalamatState extends State<editalamat> {
               TextFormField(
                 controller: nomortelp,
                 decoration: InputDecoration(
-                  hintText: ' nomor telp',
+                  hintText: 'Nomor Telp',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return "nomor telp tidak boleh kosong!";
+                    return "Nomor telp tidak boleh kosong!";
                   }
                   return null;
                 },
@@ -90,14 +91,14 @@ class _editalamatState extends State<editalamat> {
               TextFormField(
                 controller: kota,
                 decoration: InputDecoration(
-                  hintText: 'kota',
+                  hintText: 'Kota',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return "kota tidak boleh kosong!";
+                    return "Kota tidak boleh kosong!";
                   }
                   return null;
                 },
@@ -106,14 +107,14 @@ class _editalamatState extends State<editalamat> {
               TextFormField(
                 controller: namajalan,
                 decoration: InputDecoration(
-                  hintText: 'nama',
+                  hintText: 'Nama Jalan',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return "Jenis baju tidak boleh kosong!";
+                    return "Nama jalan tidak boleh kosong!";
                   }
                   return null;
                 },

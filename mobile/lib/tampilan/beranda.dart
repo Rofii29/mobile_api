@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/alamat/halaman_alamat.dart';
 import 'package:mobile/halaman_produk.dart';
+import 'package:mobile/profile/profile.dart';
 import 'buat.dart'; // Ensure this file is in the correct path
 import 'mydesign.dart'; // Ensure this file is in the correct path
 
@@ -66,27 +67,37 @@ class _BerandaState extends State<Beranda> {
     }
   }
 
+  void _goToProfilePage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ProfilePage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false, // Remove back button
-        title: Row(
-          children: [
-            ClipOval(
-              child: Image.network(
-                'https://torch.id/cdn/shop/articles/style_casual_pria_indonesia.webp?v=1701262587',
-                width: 40.0,
-                height: 40.0,
-                fit: BoxFit.cover,
+        automaticallyImplyLeading: false,
+        title: GestureDetector(
+          onTap: _goToProfilePage, // Add the onTap action
+          child: Row(
+            children: [
+              ClipOval(
+                child: Image.network(
+                  'https://torch.id/cdn/shop/articles/style_casual_pria_indonesia.webp?v=1701262587',
+                  width: 40.0,
+                  height: 40.0,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            SizedBox(width: 8.0),
-            Text(
-              'FASHION',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-            ),
-          ],
+              SizedBox(width: 8.0),
+              Text(
+                'FASHION',
+                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
         ),
       ),
       body: Column(
