@@ -19,7 +19,7 @@ class _editprofileState extends State<editprofile> {
 
   Future<bool> _ubah() async {
     final respon = await http.post(
-      Uri.parse('http://192.168.1.6/api/editprofile.php'),
+      Uri.parse('http://192.168.11.125/api/editprofile.php'),
       body: {
         'id_profile': id_profile.text,  // Pass the ID of the product to update
         'nama': nama.text,

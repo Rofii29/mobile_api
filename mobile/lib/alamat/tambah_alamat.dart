@@ -24,7 +24,7 @@ class _tambahalamatState extends State<tambahalamat> {
 
   Future _simpan() async {
     final respon = await http
-        .post(Uri.parse('http://192.168.1.6/api/createalamat.php'), body: {
+        .post(Uri.parse('http://192.168.11.125/api/createalamat.php'), body: {
       'nama_lengkap': nama_lengkap.text,
       'nomortelp': nomortelp.text,
       'kota': kota.text,

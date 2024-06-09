@@ -18,7 +18,7 @@ class _TambahProdukState extends State<TambahProduk> {
   String? ukuran; // This will hold the selected size
 
   Future _simpan() async {
-    final respon = await http.post(Uri.parse('http://192.168.1.6/api/create.php'), body: {
+    final respon = await http.post(Uri.parse('http://192.168.11.125/api/create.php'), body: {
       'nama': nama.text,
       'ukuran': ukuran,
       'harga': harga.text,

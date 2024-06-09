@@ -19,7 +19,7 @@ class _tambahprofileState extends State<tambahprofile> {
 
   Future _simpan() async {
     final respon = await http.post(
-      Uri.parse('http://192.168.1.6/api/createprofile.php'),
+      Uri.parse('http://192.168.11.125/api/createprofile.php'),
       body: {
         'nama': nama.text,
         'email': email.text,

@@ -19,7 +19,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future _getData() async {
     try {
-      final response = await http.get(Uri.parse('http://192.168.1.6/api/readprofile.php'));
+      final response = await http.get(Uri.parse('http://192.168.11.125/api/readprofile.php'));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data is List) {
@@ -42,7 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Future _hapus(String id) async {
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.1.6/api/delete.profile.php'),
+        Uri.parse('http://192.168.11.125/api/delete.profile.php'),
         body: {
           "id_profile": id,
         },

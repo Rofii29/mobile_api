@@ -23,7 +23,7 @@ class _halamanalamatState extends State<halamanalamat> {
 
   Future _getData() async {
     try {
-      final response = await http.get(Uri.parse('http://192.168.1.6/api/readalamat.php'));
+      final response = await http.get(Uri.parse('http://192.168.11.125/api/readalamat.php'));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         setState(() {

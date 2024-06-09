@@ -23,7 +23,7 @@ class _HalamanProdukState extends State<HalamanProduk> {
 
   Future _getData() async {
     try {
-      final response = await http.get(Uri.parse('http://192.168.1.6/api/read.php'));
+      final response = await http.get(Uri.parse('http://192.168.11.125/api/read.php'));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         setState(() {
@@ -41,7 +41,7 @@ class _HalamanProdukState extends State<HalamanProduk> {
   Future _hapus(String id) async {
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.1.6/api/delete.php'),
+        Uri.parse('http://192.168.11.125/api/delete.php'),
         body: {
           "id_produk": id,
         },

@@ -20,7 +20,7 @@ class _editalamatState extends State<editalamat> {
 
   Future<bool> _ubah() async {
     final response = await http.post(
-      Uri.parse('http://192.168.1.6/api/editalamat.php'),
+      Uri.parse('http://192.168.11.125/api/editalamat.php'),
       body: {
         'id_alamat': id_alamat.text,  // Pass the ID of the product to update
         'nama_lengkap': nama_lengkap.text,
